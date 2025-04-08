@@ -28,8 +28,8 @@ jobs:
 
           url = 'https://api.github.com/graphql'
           query = '''
-          query {
-            repository(owner: \"openpitrix\", name: \"openpitrix\") {
+          query($owner: String!, $name: String!) {
+            repository(owner: $owner, name: $name)  {
               pullRequests(last: 5) {
                 nodes {
                   title
@@ -38,6 +38,10 @@ jobs:
             }
           }
           '''
+          variables = {
+            'owner': 'openpitrix',
+            'name': 'openpitrix'
+          }
 
           token = os.getenv('GITHUB_TOKEN_CUSTOM')
           headers = {
