@@ -82,7 +82,7 @@ def get_pull_request_reviewers(owner, repo):
 
     if response.status_code == 200:
         data = response.json()
-
+        print(response.json())
         if data.get("data") and data["data"].get("repository"):
             reviewers_data = []
             for pr in data["data"]["repository"]["pullRequests"]["nodes"]:
