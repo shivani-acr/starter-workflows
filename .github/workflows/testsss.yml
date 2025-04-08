@@ -1,62 +1,27 @@
-name: Query GitHub PR Titles via GraphQL
+name: Query GitHub PR Titles
 
 on:
   push:
     branches:
-      - '**'  # match any branch
-
+      - '**'
 
 jobs:
   fetch-prs:
     runs-on: ubuntu-latest
 
-    steps:    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install requests
+      - name: Install dependencies
         run: pip install requests
 
-      - name: Query PR Titles
+      - name: Run Python script
         env:
           GITHUB_TOKEN_CUSTOM: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python -c "
-          import requests, os
-
-          url = 'https://api.github.com/graphql'
-          query = '''
-          query($owner: String!, $name: String!) {
-            repository(owner: $owner, name: $name)  {
-              pullRequests(last: 5) {
-                nodes {
-                  title
-                }
-              }
-            }
-          }
-          '''
-          variables = {
-            'owner': 'openpitrix',
-            'name': 'openpitrix'
-          }
-
-          token = os.getenv('GITHUB_TOKEN_CUSTOM')
-          headers = {
-              'Content-Type': 'application/json',
-              'Authorization': f'Bearer {token}'
-          }
-
-          response = requests.post(url, json={'query': query, 'variables': variables, headers=headers)
-
-          print('Status Code:', response.status_code)
-          print('Content-Type:', response.headers.get('Content-Type'))
-          print('Raw Response Text:\\n', response.text)
-
-          if response.headers.get('Content-Type', '').startswith('application/json'):
-              data = response.json()
-              for pr in data['data']['repository']['pullRequests']['nodes']:
-                  print('- ' + pr['title'])
-                    "
+        run: python .github/scripts/query_prs.py
