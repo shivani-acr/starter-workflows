@@ -3,7 +3,7 @@ import requests
 
 # Get GitHub token from environment
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN_CUSTOM")
-ORG_NAME = "openpitrix"  # Replace with your organization name
+ORG_NAME = "your_organization_name_here"  # Replace with your organization name
 
 # GraphQL endpoint
 url = "https://api.github.com/graphql"
@@ -49,13 +49,12 @@ def get_repositories():
         print(f"Response: {response.text}")
         return []
 
-# Query to get PR titles and reviewers for a specific repository
+# Query to get reviewers for a specific repository
 pr_query = """
 query($owner: String!, $repo: String!) {
   repository(owner: $owner, name: $repo) {
     pullRequests(last: 5) {
       nodes {
-        title
         reviews(last: 5) {
           nodes {
             user {
@@ -70,8 +69,8 @@ query($owner: String!, $repo: String!) {
 }
 """
 
-# Request to fetch PR titles and reviewers
-def get_pull_requests(owner, repo):
+# Request to fetch reviewers for each PR
+def get_pull_request_reviewers(owner, repo):
     variables = {
         "owner": owner,
         "repo": repo
@@ -82,19 +81,16 @@ def get_pull_requests(owner, repo):
         data = response.json()
 
         if data.get("data") and data["data"].get("repository"):
-            pr_data = []
+            reviewers_data = []
             for pr in data["data"]["repository"]["pullRequests"]["nodes"]:
-                pr_info = {
-                    "title": pr["title"],
-                    "reviewers": []
-                }
+                pr_reviewers = []
                 for review in pr["reviews"]["nodes"]:
-                    pr_info["reviewers"].append({
+                    pr_reviewers.append({
                         "login": review["user"]["login"],
                         "state": review["state"]
                     })
-                pr_data.append(pr_info)
-            return pr_data
+                reviewers_data.append(pr_reviewers)
+            return reviewers_data
         else:
             print(f"Error: No PR data found for repository: {repo}")
             return []
@@ -109,15 +105,14 @@ def main():
 
     if repositories:
         for repo in repositories:
-            print(f"\nFetching PR titles and reviewers for repository: {repo}")
-            pr_data = get_pull_requests(ORG_NAME, repo)
+            print(f"\nFetching reviewers for repository: {repo}")
+            reviewers_data = get_pull_request_reviewers(ORG_NAME, repo)
             
-            if pr_data:
-                for pr in pr_data:
-                    print(f"PR Title: {pr['title']}")
-                    if pr["reviewers"]:
+            if reviewers_data:
+                for pr_reviewers in reviewers_data:
+                    if pr_reviewers:
                         print("Reviewers:")
-                        for reviewer in pr["reviewers"]:
+                        for reviewer in pr_reviewers:
                             print(f"- {reviewer['login']} (State: {reviewer['state']})")
                     else:
                         print("No reviewers found for this PR.")
@@ -128,4 +123,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
