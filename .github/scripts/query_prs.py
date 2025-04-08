@@ -34,13 +34,21 @@ def get_repositories():
     }
     response = requests.post(url, json={"query": repo_query, "variables": variables}, headers=headers)
 
+    # Check for a successful response
     if response.status_code == 200:
         data = response.json()
-        repos = [repo["name"] for repo in data["data"]["organization"]["repositories"]["nodes"]]
-        return repos
+        
+        # Check if data structure is correct
+        if data.get("data") and data["data"].get("organization"):
+            repos = [repo["name"] for repo in data["data"]["organization"]["repositories"]["nodes"]]
+            return repos
+        else:
+            print(f"Error: Data not found in the response")
+            print(f"Response: {data}")
+            return []
     else:
         print(f"Failed to fetch repositories: {response.status_code}")
-        print(response.text)
+        print(f"Response: {response.text}")
         return []
 
 # Query to get PR titles for a specific repository
@@ -64,29 +72,39 @@ def get_pull_requests(owner, repo):
     }
     response = requests.post(url, json={"query": pr_query, "variables": variables}, headers=headers)
 
+    # Check for a successful response
     if response.status_code == 200:
         data = response.json()
-        pr_titles = [pr["title"] for pr in data["data"]["repository"]["pullRequests"]["nodes"]]
-        return pr_titles
+        
+        if data.get("data") and data["data"].get("repository"):
+            pr_titles = [pr["title"] for pr in data["data"]["repository"]["pullRequests"]["nodes"]]
+            return pr_titles
+        else:
+            print(f"Error: No PR data found for repository: {repo}")
+            return []
     else:
         print(f"Failed to fetch PRs for {repo}: {response.status_code}")
-        print(response.text)
+        print(f"Response: {response.text}")
         return []
 
 # Main logic
 def main():
     repositories = get_repositories()
 
-    for repo in repositories:
-        print(f"\nFetching PR titles for repository: {repo}")
-        pr_titles = get_pull_requests(ORG_NAME, repo)
-        
-        if pr_titles:
-            print(f"Top 5 PR Titles in {repo}:")
-            for i, title in enumerate(pr_titles, 1):
-                print(f"{i}. {title}")
-        else:
-            print(f"No pull requests found for {repo}")
+    if repositories:
+        for repo in repositories:
+            print(f"\nFetching PR titles for repository: {repo}")
+            pr_titles = get_pull_requests(ORG_NAME, repo)
+            
+            if pr_titles:
+                print(f"Top 5 PR Titles in {repo}:")
+                for i, title in enumerate(pr_titles, 1):
+                    print(f"{i}. {title}")
+            else:
+                print(f"No pull requests found for {repo}")
+    else:
+        print("No repositories found or an error occurred.")
 
 if __name__ == "__main__":
     main()
+
