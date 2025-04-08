@@ -21,7 +21,7 @@ jobs:
 
       - name: Query PR Titles
         env:
-          GITHUB_TOKEN_CUSTOM: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN_CUSTOM: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -c "
           import requests, os
