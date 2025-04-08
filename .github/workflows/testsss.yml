@@ -1,13 +1,16 @@
 name: Query GitHub PR Titles via GraphQL
 
 on:
-  workflow_dispatch:  # manual trigger from GitHub UI
+  push:
+    branches:
+      - '**'  # match any branch
+
 
 jobs:
   fetch-prs:
     runs-on: ubuntu-latest
 
-    steps:
+    steps:    
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
