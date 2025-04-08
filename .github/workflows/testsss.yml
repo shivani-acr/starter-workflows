@@ -24,35 +24,35 @@ jobs:
           GITHUB_TOKEN_CUSTOM: ${{ secrets.ACCESS_TOKEN }}
         run: |
           python -c "
-import requests, os
+          import requests, os
 
-url = 'https://api.github.com/graphql'
-query = '''
-query {
-  repository(owner: \"openpitrix\", name: \"openpitrix\") {
-    pullRequests(last: 5) {
-      nodes {
-        title
-      }
-    }
-  }
-}
-'''
+          url = 'https://api.github.com/graphql'
+          query = '''
+          query {
+            repository(owner: \"openpitrix\", name: \"openpitrix\") {
+              pullRequests(last: 5) {
+                nodes {
+                  title
+                }
+              }
+            }
+          }
+          '''
 
-token = os.getenv('GITHUB_TOKEN_CUSTOM')
-headers = {
-    'Content-Type': 'application/json',
-    'Authorization': f'Bearer {token}'
-}
+          token = os.getenv('GITHUB_TOKEN_CUSTOM')
+          headers = {
+              'Content-Type': 'application/json',
+              'Authorization': f'Bearer {token}'
+          }
 
-response = requests.post(url, json={'query': query}, headers=headers)
+          response = requests.post(url, json={'query': query}, headers=headers)
 
-print('Status Code:', response.status_code)
-print('Content-Type:', response.headers.get('Content-Type'))
-print('Raw Response Text:\\n', response.text)
+          print('Status Code:', response.status_code)
+          print('Content-Type:', response.headers.get('Content-Type'))
+          print('Raw Response Text:\\n', response.text)
 
-if response.headers.get('Content-Type', '').startswith('application/json'):
-    data = response.json()
-    for pr in data['data']['repository']['pullRequests']['nodes']:
-        print('- ' + pr['title'])
-          "
+          if response.headers.get('Content-Type', '').startswith('application/json'):
+              data = response.json()
+              for pr in data['data']['repository']['pullRequests']['nodes']:
+                  print('- ' + pr['title'])
+                    "
