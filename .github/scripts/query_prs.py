@@ -3,7 +3,7 @@ import requests
 
 # Get GitHub token from environment
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN_CUSTOM")
-ORG_NAME = "your_organization_name_here"  # Replace with your organization name
+ORG_NAME = "openpitrix"  # Replace with your organization name
 
 # GraphQL endpoint
 url = "https://api.github.com/graphql"
