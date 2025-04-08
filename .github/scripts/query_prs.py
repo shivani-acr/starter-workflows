@@ -55,12 +55,15 @@ query($owner: String!, $repo: String!) {
   repository(owner: $owner, name: $repo) {
     pullRequests(last: 5) {
       nodes {
-        reviews(last: 5) {
+        reviewRequests(first: 10) {
           nodes {
-            user {
-              login
+            requestedReviewer {
+              ... on User {
+                login
+              }
             }
-            state
+          }
+          }
           }
         }
       }
