@@ -48,7 +48,8 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${GH_TOKEN}" \
               "https://api.github.com/orgs/$ORG_NAME/repos?per_page=100&page=${page}")
-            repolist=$(echo "$result" | jq -r '.[]  | [.id,.name]')
+            repolist=$(echo "$result" | jq -r '.[]  | "\(.id),\(.name)"')
+')
             echo "$repolist"
             if [[ -z "$repolist" ]]; then
               break
