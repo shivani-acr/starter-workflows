@@ -15,7 +15,7 @@ permissions:
 env:
    ORG_NAME: "openpitrix"
    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-   TARGET_DATE: "2025-03-01T00:00:00Z"
+   TARGET_DATE: "2017-03-01T00:00:00Z"
 jobs:
    Get-Metrics:
      runs-on: ubuntu-latest 
@@ -73,6 +73,7 @@ jobs:
               #  echo "$API_RESPONSE"
                PRs=$(echo "$API_RESPONSE" | jq -r --arg date "$TARGET_DATE" '.[] | select(.created_at >= $date) | .number')
                createddate=$(echo "$API_RESPONSE" | jq -r --arg date "$TARGET_DATE" '.[] | select(.created_at >= $date) | .created_at')
+               echo "$createddate"
                if [[ -z "$PRs" ]]; then
                  # echo "No more  PR found for this --$REPO-- {{$page}}"
                  break
