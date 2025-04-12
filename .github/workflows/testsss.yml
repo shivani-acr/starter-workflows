@@ -182,15 +182,16 @@ jobs:
                echo "$key: ${string_count[$key]}"
            done
            key="abc"
-           echo "string_count[$key]"
+           echo "$string_count[$key]"
            echo "commenters"
            for key in "${!user_commented_count[@]}"; do
                echo "$key: ${user_commented_count[$key]}"
            done
-          #  while IFS=, read -r USER_NAME COMMIT_COUNT PR_COUNT MPR_Count; do
-          #     echo "$USER_NAME,$COMMIT_COUNT,$PR_COUNT,$MPR_Count,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}"
-          #     echo "$USER_NAME,$COMMIT_COUNT,$PR_COUNT,$MPR_Count,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}" >> commit_pr_mpr_rev.txt
-          #  done < commit_pr_mpr.txt
+           echo"output"
+           while read -r USER_NAME ; do
+              echo "$USER_NAME,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}"
+              echo "$USER_NAME,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}" >> commit_pr_mpr_rev.txt
+           done < members.txt
  
       #  - name: Each User code contributions
       #    run: |
