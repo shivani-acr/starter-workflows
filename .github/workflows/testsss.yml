@@ -56,6 +56,22 @@ jobs:
             echo "$repolist" >> repo_list.txt
             page=$((page + 1))
           done
+       - name: List members
+         run: |
+          page=1
+          while :; do
+            result=$(curl -L \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer <YOUR-TOKEN>" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/orgs/$ORG_NAME/members?per_page=100&page=${page}"")
+            echo "$members"
+            if [[ -z "$members" ]]; then
+              break
+            fi
+            echo "$repolist" >> members.txt
+            page=$((page + 1))
+          done        
        - name: Number of Code reviews of every user.
          run: |
            declare -A string_count
@@ -151,10 +167,10 @@ jobs:
                    user_commented_count[$str]=1
                  fi
              }
-            #  while read -r USERNAME;do
-            #    string_count[$USERNAME]=0
-            #    user_commented_count[$USERNAME]=0
-            #  done < members.txt
+             while read -r USERNAME;do
+               string_count[$USERNAME]=0
+               user_commented_count[$USERNAME]=0
+             done < members.txt
              if [[ -n "$flag1" ]]; then
                  # echo "No reviewers"
                  while read -r UserName;do
@@ -173,6 +189,8 @@ jobs:
            for key in "${!string_count[@]}"; do
                echo "$key: ${string_count[$key]}"
            done
+           key="abc"
+           echo "string_count[$key]"
            echo "commenters"
            for key in "${!user_commented_count[@]}"; do
                echo "$key: ${user_commented_count[$key]}"
