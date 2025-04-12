@@ -18,7 +18,7 @@ env:
    TARGET_DATE: "2025-03-01T00:00:00Z"
 jobs:
    Get-Metrics:
-     runs-on: codebuild-${{ github.event.repository.name }}-notification-${{ github.run_id }}-${{ github.run_attempt }}
+     runs-on: ubuntu-latest 
      timeout-minutes: 120
  
      # Steps represent a sequence of tasks that will be executed as part of the job
