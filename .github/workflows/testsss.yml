@@ -70,8 +70,9 @@ jobs:
                        --url "https://api.github.com/repositories/${id}/pulls?state=all&page=${page}" \
                        --header "Accept: application/vnd.github+json" \
                        --header "Authorization: Bearer $GH_TOKEN")
-               echo "$API_RESPONSE"
+              #  echo "$API_RESPONSE"
                PRs=$(echo "$API_RESPONSE" | jq -r --arg date "$TARGET_DATE" '.[] | select(.created_at >= $date) | .number')
+               createddate=$(echo "$API_RESPONSE" | jq -r --arg date "$TARGET_DATE" '.[] | select(.created_at >= $date) | .created_at')
                if [[ -z "$PRs" ]]; then
                  # echo "No more  PR found for this --$REPO-- {{$page}}"
                  break
