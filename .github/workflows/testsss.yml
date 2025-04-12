@@ -128,51 +128,51 @@ jobs:
                fi
              done < PRs.txt
              rm -f PRs.txt
-             add_or_update_string() {
-               local str="$1"
-               if [[ -n "${string_count[$str]}" ]]; then
-                  string_count[$str]=$((string_count[$str] + 1))
-               else
-                  string_count[$str]=1
-               fi
-             }
-             add_or_update_strings() {
-                   local str="$1"
-                 if [[ -n "${user_commented_count[$str]}" ]]; then
-                   user_commented_count[$str]=$((user_commented_count[$str] + 1))
-                 else
-                   user_commented_count[$str]=1
-                 fi
-             }
-             while read -r USERNAME;do
-               string_count[$USERNAME]=0
-               user_commented_count[$USERNAME]=0
-             done < members.txt
-             if [[ -n "$flag1" ]]; then
-                 # echo "No reviewers"
-                 while read -r UserName;do
-                     add_or_update_string "$UserName"
-                 done < reviewers.txt
-                 rm -f reviewers.txt
-             fi
-             if [[ -n "$flagc" ]]; then
-                 while read -r UserName;do
-                   add_or_update_strings "$UserName"
-                 done < commented_users.txt
-                 rm -f commented_users.txt
-             fi
+            #  add_or_update_string() {
+            #    local str="$1"
+            #    if [[ -n "${string_count[$str]}" ]]; then
+            #       string_count[$str]=$((string_count[$str] + 1))
+            #    else
+            #       string_count[$str]=1
+            #    fi
+            #  }
+            #  add_or_update_strings() {
+            #        local str="$1"
+            #      if [[ -n "${user_commented_count[$str]}" ]]; then
+            #        user_commented_count[$str]=$((user_commented_count[$str] + 1))
+            #      else
+            #        user_commented_count[$str]=1
+            #      fi
+            #  }
+            #  while read -r USERNAME;do
+            #    string_count[$USERNAME]=0
+            #    user_commented_count[$USERNAME]=0
+            #  done < members.txt
+            #  if [[ -n "$flag1" ]]; then
+            #      # echo "No reviewers"
+            #      while read -r UserName;do
+            #          add_or_update_string "$UserName"
+            #      done < reviewers.txt
+            #      rm -f reviewers.txt
+            #  fi
+            #  if [[ -n "$flagc" ]]; then
+            #      while read -r UserName;do
+            #        add_or_update_strings "$UserName"
+            #      done < commented_users.txt
+            #      rm -f commented_users.txt
+            #  fi
            done < repo_list.txt
-           for key in "${!string_count[@]}"; do
-               echo "$key: ${string_count[$key]}"
-           done
-           echo "commenters"
-           for key in "${!user_commented_count[@]}"; do
-               echo "$key: ${user_commented_count[$key]}"
-           done
-           while IFS=, read -r USER_NAME COMMIT_COUNT PR_COUNT MPR_Count; do
-              echo "$USER_NAME,$COMMIT_COUNT,$PR_COUNT,$MPR_Count,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}"
-              echo "$USER_NAME,$COMMIT_COUNT,$PR_COUNT,$MPR_Count,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}" >> commit_pr_mpr_rev.txt
-           done < commit_pr_mpr.txt
+          #  for key in "${!string_count[@]}"; do
+          #      echo "$key: ${string_count[$key]}"
+          #  done
+          #  echo "commenters"
+          #  for key in "${!user_commented_count[@]}"; do
+          #      echo "$key: ${user_commented_count[$key]}"
+          #  done
+          #  while IFS=, read -r USER_NAME COMMIT_COUNT PR_COUNT MPR_Count; do
+          #     echo "$USER_NAME,$COMMIT_COUNT,$PR_COUNT,$MPR_Count,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}"
+          #     echo "$USER_NAME,$COMMIT_COUNT,$PR_COUNT,$MPR_Count,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}" >> commit_pr_mpr_rev.txt
+          #  done < commit_pr_mpr.txt
  
       #  - name: Each User code contributions
       #    run: |
