@@ -15,7 +15,7 @@ permissions:
 env:
    ORG_NAME: "openpitrix"
    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-   TARGET_DATE: "2017-03-01T00:00:00Z"
+   TARGET_DATE: "2018-01-01T00:00:00Z"
 jobs:
    Get-Metrics:
      runs-on: ubuntu-latest 
