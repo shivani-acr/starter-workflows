@@ -68,7 +68,12 @@ jobs:
          run: |
            declare -A string_count
            declare -A user_commented_count
+           while read -r USERNAME;do
+               string_count[$USERNAME]=0
+               user_commented_count[$USERNAME]=0
+           done < members.txt
            while IFS=, read -r id REPO; do
+             test=1
              echo "reviewers for $REPO"
              page=1
              PRs=""
@@ -159,10 +164,7 @@ jobs:
                    user_commented_count[$str]=1
                  fi
              }
-             while read -r USERNAME;do
-               string_count[$USERNAME]=0
-               user_commented_count[$USERNAME]=0
-             done < members.txt
+             
              if [[ -n "$flag1" ]]; then
                  # echo "No reviewers"
                  while read -r UserName;do
@@ -176,7 +178,10 @@ jobs:
                  done < commented_users.txt
                  rm -f commented_users.txt
              fi
-            break
+             if [[ $test -eq 2 ]]; then
+              break
+             fi
+             test=((test + 1))
            done < repo_list.txt
            for key in "${!string_count[@]}"; do
                echo "$key: ${string_count[$key]}"
