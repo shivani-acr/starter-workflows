@@ -61,7 +61,7 @@ jobs:
             echo "libangrui" >> members.txt
             echo "chai2010" >> members.txt
             echo "runzexia" >> members.txt
-            echo "zheng1 >> members.txt
+            echo "zheng1" >> members.txt
             echo "leoendless" >> members.txt
             echo "abc" >> members.txt
        - name: Number of Code reviews of every user.
