@@ -80,6 +80,7 @@ jobs:
                fi
                page=$((page + 1))
                flag="$PRs"
+               echo "$PRs"
                echo "$PRs" >> PRs.txt
                has_older=$(echo "$API_RESPONSE" | jq -r --arg date "$TARGET_DATE" '.[] | select(.created_at < $date)' | wc -l)
                if [[ "$has_older" -gt 0 ]]; then
@@ -117,14 +118,17 @@ jobs:
                  flagc="$revComments"
                  echo "$revComments" >> commented_users.txt
                done
+               echo "1"
                requested_reviewers=$(echo "$API_RESPONSE1" | jq -r '.requested_reviewers[]?.login // empty')
                if [[ -n "$requested_reviewers" ]]; then
                  flag1="$requested_reviewers"]
+                  echo "2"
                  echo "$requested_reviewers" >> reviewers.txt
                fi
                requested_reviewers2=$(echo "$API_RESPONSE2" | jq -r 'if type=="array" then .[] | .user.login else empty end')
                if [[ -n "$requested_reviewers2" ]]; then
                  flag1="$requested_reviewers2"
+                 echo "3"
                  echo "$requested_reviewers2"  >> reviewers.txt
                fi
              done < PRs.txt
@@ -162,6 +166,7 @@ jobs:
             #      done < commented_users.txt
             #      rm -f commented_users.txt
             #  fi
+            break
            done < repo_list.txt
           #  for key in "${!string_count[@]}"; do
           #      echo "$key: ${string_count[$key]}"
