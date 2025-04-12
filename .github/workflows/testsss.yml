@@ -155,19 +155,19 @@ jobs:
             #    string_count[$USERNAME]=0
             #    user_commented_count[$USERNAME]=0
             #  done < members.txt
-            #  if [[ -n "$flag1" ]]; then
-            #      # echo "No reviewers"
-            #      while read -r UserName;do
-            #          add_or_update_string "$UserName"
-            #      done < reviewers.txt
-            #      rm -f reviewers.txt
-            #  fi
-            #  if [[ -n "$flagc" ]]; then
-            #      while read -r UserName;do
-            #        add_or_update_strings "$UserName"
-            #      done < commented_users.txt
-            #      rm -f commented_users.txt
-            #  fi
+             if [[ -n "$flag1" ]]; then
+                 # echo "No reviewers"
+                 while read -r UserName;do
+                     add_or_update_string "$UserName"
+                 done < reviewers.txt
+                 rm -f reviewers.txt
+             fi
+             if [[ -n "$flagc" ]]; then
+                 while read -r UserName;do
+                   add_or_update_strings "$UserName"
+                 done < commented_users.txt
+                 rm -f commented_users.txt
+             fi
             break
            done < repo_list.txt
            for key in "${!string_count[@]}"; do
