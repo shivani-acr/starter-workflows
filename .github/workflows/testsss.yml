@@ -181,7 +181,7 @@ jobs:
              if [[ $test -eq 2 ]]; then
               break
              fi
-             test=((test + 1))
+             test=$((test + 1))
            done < repo_list.txt
            for key in "${!string_count[@]}"; do
                echo "$key: ${string_count[$key]}"
