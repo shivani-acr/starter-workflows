@@ -1,13 +1,9 @@
 name: Contributor Metrics in PSM
  
 on:
-   # Triggers the workflow on push or pull request events but only for the "main" branch
-   push:
-     branches:
-       - ""
-     tags:
-       - "v**"
- 
+  push:
+    branches:
+      - '**'
 defaults:
    run:
      shell: bash
