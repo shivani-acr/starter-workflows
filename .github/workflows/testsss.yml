@@ -187,7 +187,7 @@ jobs:
            for key in "${!user_commented_count[@]}"; do
                echo "$key: ${user_commented_count[$key]}"
            done
-           echo"output"
+           echo "output"
            while read -r USER_NAME ; do
               echo "$USER_NAME,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}"
               echo "$USER_NAME,${string_count[$USER_NAME]},${user_commented_count[$USER_NAME]}" >> commit_pr_mpr_rev.txt
