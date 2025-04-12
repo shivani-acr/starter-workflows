@@ -56,7 +56,7 @@ jobs:
             echo "$repolist" >> repo_list.txt
             page=$((page + 1))
           done
-        name: Number of Code reviews of every user.
+       - name: Number of Code reviews of every user.
          run: |
            declare -A string_count
            declare -A user_commented_count
