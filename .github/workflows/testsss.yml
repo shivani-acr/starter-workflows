@@ -123,12 +123,14 @@ jobs:
                if [[ -n "$requested_reviewers" ]]; then
                  flag1="$requested_reviewers"]
                   echo "2"
+                  echo "$requested_reviewers" 
                  echo "$requested_reviewers" >> reviewers.txt
                fi
                requested_reviewers2=$(echo "$API_RESPONSE2" | jq -r 'if type=="array" then .[] | .user.login else empty end')
                if [[ -n "$requested_reviewers2" ]]; then
                  flag1="$requested_reviewers2"
                  echo "3"
+                 echo "$requested_reviewers2"
                  echo "$requested_reviewers2"  >> reviewers.txt
                fi
              done < PRs.txt
