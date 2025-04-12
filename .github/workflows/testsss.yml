@@ -26,13 +26,13 @@ jobs:
        - name: Checkout Code
          uses: actions/checkout@v4
  
-       - name: Initialize
-         run: |
-           GITHUB_USER_EMAIL= "racharlasputhnika27@gmail.com"
-           GITHUB_USER_NAME="shivani-acr"
-           pip install yq
-           git config --global user.email "$GITHUB_USER_EMAIL"
-           git config --global user.name "$GITHUB_USER_NAME"
+      #  - name: Initialize
+      #    run: |
+      #      GITHUB_USER_EMAIL= "racharlasputhnika27@gmail.com"
+      #      GITHUB_USER_NAME="shivani-acr"
+      #      pip install yq
+      #      git config --global user.email "$GITHUB_USER_EMAIL"
+      #      git config --global user.name "$GITHUB_USER_NAME"
  
        - name: Install jq
          run: sudo apt update && sudo apt install -y jq
