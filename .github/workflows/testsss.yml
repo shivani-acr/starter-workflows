@@ -1,27 +1,62 @@
-name: Query GitHub PR Titles
-
+name: Contributor Metrics in PSM
+ 
 on:
-  push:
-    branches:
-      - '**'
-
+   # Triggers the workflow on push or pull request events but only for the "main" branch
+   push:
+     branches:
+       - ""
+     tags:
+       - "v**"
+ 
+defaults:
+   run:
+     shell: bash
+ 
+permissions:
+   contents: write
+   actions: read
+ 
+env:
+   ORG_NAME: "openpitrix"
+   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   TARGET_DATE: "2025-03-01T00:00:00Z"
 jobs:
-  fetch-prs:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: pip install requests
-
-      - name: Run Python script
-        env:
-          GITHUB_TOKEN_CUSTOM: ${{ secrets.GITHUB_TOKEN }}
-        run: python .github/scripts/query_prs.py
+   Get-Metrics:
+     runs-on: codebuild-${{ github.event.repository.name }}-notification-${{ github.run_id }}-${{ github.run_attempt }}
+     timeout-minutes: 120
+ 
+     # Steps represent a sequence of tasks that will be executed as part of the job
+     steps:
+       - name: Checkout Code
+         uses: actions/checkout@v4
+ 
+       - name: Initialize
+         run: |
+           GITHUB_USER_EMAIL= "racharlasputhnika27@gmail.coom"
+           GITHUB_USER_NAME="shivani-acr"
+           pip install yq
+           git config --global user.email "$GITHUB_USER_EMAIL"
+           git config --global user.name "$GITHUB_USER_NAME"
+ 
+       - name: Install jq
+         run: sudo apt update && sudo apt install -y jq
+       - name: Set up UTF-8 locale
+         run: |
+           sudo locale-gen en_US.UTF-8
+           sudo update-locale LANG=en_US.UTF-8
+       - name: List Repositories
+         run: |
+          page=1
+          while :; do
+            result=$(curl -s \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              "https://api.github.com/orgs/$ORG_NAME/repos?per_page=100&page=${page}")
+            repolist=$(echo "$result" | jq -r '.[]  | [.id,.name]')
+            echo "$repolist"
+            if [[ -z "$repolist" ]]; then
+              break
+            fi
+            echo "$repolist" >> repo_list.txt
+            page=$((page + 1))
+          done
