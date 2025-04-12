@@ -58,16 +58,12 @@ jobs:
           done
        - name: List members
          run: |
-          page=1
-          
             echo "libangrui" >> members.txt
             echo "chai2010" >> members.txt
             echo "runzexia" >> members.txt
             echo "zheng1 >> members.txt
             echo "leoendless" >> members.txt
             echo "abc" >> members.txt
-            page=$((page + 1))
-          done        
        - name: Number of Code reviews of every user.
          run: |
            declare -A string_count
