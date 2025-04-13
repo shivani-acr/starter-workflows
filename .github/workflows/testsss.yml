@@ -15,7 +15,7 @@ permissions:
 env:
    ORG_NAME: "openpitrix"
    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-   TARGET_DATE: "2024-01-01T00:00:00Z"
+   TARGET_DATE: "2020-01-01T00:00:00Z"
 jobs:
    Get-Metrics:
      runs-on: ubuntu-latest 
@@ -72,8 +72,8 @@ jobs:
                string_count[$USERNAME]=0
                user_commented_count[$USERNAME]=0
            done < members.txt
+           test=1
            while IFS=, read -r id REPO; do
-             test=1
              echo "reviewers for $REPO"
              page=1
              PRs=""
